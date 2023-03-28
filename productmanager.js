@@ -24,10 +24,10 @@ class ProductManager{
                 }
             }
             this.products.push(product);
-            console.log(this.products);
+        
 
         }else{
-            console.log('debe completar todos los datos');
+            console.log('completar todos los campos obligatorios');
         }
     }
 
@@ -40,7 +40,7 @@ class ProductManager{
         if(productoid != -1){
             console.log(this.products[productoid]);
         }else{
-            console.log('no existe el producto');
+            console.log('Not found');
         }
     }
 }
@@ -49,7 +49,6 @@ const producto = new ProductManager();
 producto.addProduct('peine','para peinar',30,'direccionfoto',123,30);
 producto.addProduct('tijera','para cortar',30,'foto','',20);
 producto.addProduct('cuter','para cortar',20,'dire',123,10);
-producto.addProduct('Regla','para medir',25,'dire',12,10);
+//producto.addProduct('Regla','para medir',25,'dire',12,10);
 producto.getProductbyId(1);
-producto.getProductbyId(2);
-producto.getProducts();
+console.log(producto.getProducts());
