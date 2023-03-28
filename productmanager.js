@@ -49,5 +49,7 @@ const producto = new ProductManager();
 producto.addProduct('peine','para peinar',30,'direccionfoto',123,30);
 producto.addProduct('tijera','elemento para cortar 1',30,'direccion','',20);
 producto.addProduct('cuter','elemento para cortar',20,'direccion',123,10);
+producto.addProduct('regla','elemento para cortar',20,'direccion',124,10);
 producto.getProductbyId(1);
+producto.getProductbyId(2);
 console.log(producto.getProducts());
