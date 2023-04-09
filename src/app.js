@@ -2,6 +2,7 @@ import ProductManager from "./productmanager.js";
 //import fs from 'fs';
 import express from 'express';
 const app = express();
+app.use(express.urlencoded({extended:true}))
 const productManager = new ProductManager('./src/Productos.json');
 
 //const env = async () => {
