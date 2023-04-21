@@ -1,0 +1,29 @@
+[
+	{
+		"title": "tv",
+		"description": "para ver",
+		"code": 123,
+		"stock": 12,
+		"category": "electro",
+		"status": true,
+		"id": 1
+	},
+	{
+		"title": "proyector",
+		"description": "para ver",
+		"code": 125,
+		"stock": 13,
+		"category": "electro",
+		"status": true,
+		"id": 2
+	},
+	{
+		"title": "proyector",
+		"description": "para ver",
+		"code": 126,
+		"stock": 13,
+		"category": "electro",
+		"status": true,
+		"id": 3
+	}
+]

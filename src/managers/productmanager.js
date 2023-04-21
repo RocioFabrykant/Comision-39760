@@ -4,37 +4,29 @@ export default class ProductManager {
         this.products = [];
         this.path = path;
     }
-    addProduct = async (title, description, price, thumbnail, code, stock) => {
-        const product = {
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        }
-
+    addProduct = async (producto) => {
         try {
             const productos = await this.getProducts();
-            if (title != "" && description != "" && price != "" && thumbnail != "" && code != "" && stock != "") {
-                if (productos.length === 0) {
-                    product.id = 1;
-                } else {
-                    product.id = productos[productos.length - 1].id + 1;
-                    if (productos.find(product => product.code === code)) {
-                        console.log('el code ya existe');
-                        return;
-                    }
-                }
-                productos.push(product);
-                await fs.promises.writeFile(this.path, JSON.stringify(productos, null, '\t'));
 
-
+            if (productos.length === 0) {
+                producto.id = 1;
             } else {
-                console.log('completar todos los campos obligatorios');
+                producto.id = productos[productos.length - 1].id + 1;
+                if (productos.find(p => p.code === producto.code)) {
+                    console.log('el code ya existe');
+                    return 'el code ya existe';
+                }
             }
+            productos.push(producto);
+
+            await fs.promises.writeFile(this.path, JSON.stringify(productos, null, '\t'));
+            return productos;
+
+
+
         } catch (error) {
-            console.log(error);
+            console.log('entro al error');
+            return 'error';
         }
     }
 
@@ -48,7 +40,7 @@ export default class ProductManager {
                 return [];
             }
         } catch (error) {
-            console.log(error);
+            return error;
         }
 
     }
@@ -69,38 +61,38 @@ export default class ProductManager {
             }
 
         } catch (error) {
-            console.log(error);
+            return error;
         }
     }
 
     updateProduct = async (id, obj) => {
-        //ver de reutilizar getproducts y getproductbyid
         try {
             if (fs.existsSync(this.path)) {
                 const productos = await this.getProducts();
-                const productoId = await this.getProductbyId(id); 
-                if(productoId != 'Not found'){
-                    productos[productos.findIndex(producto => producto.id === id)] = {...obj,id:id};
-                }else{
+                const productoId = await this.getProductbyId(id);
+                if (productoId != 'Not found') {
+                    productos[productos.findIndex(producto => producto.id === id)] = {
+                        ...obj,
+                        id: id
+                    };
+                } else {
                     return 'no existe el id';
-                    
+
                 }
-                
+
                 await fs.promises.writeFile(this.path, JSON.stringify(productos, null, '\t'));
-                    return productos;
-                } 
-             else {
+                return productos[productos.findIndex(producto => producto.id === id)];
+            } else {
                 return 'no existe el archivo';
             }
         } catch (error) {
-            console.log(error);
+            return error;
         }
     }
 
     deleteProduct = async (id) => {
         try {
             const productos = await this.getProducts();
-            //const productoid = productos.findIndex(producto => producto.id === id);
             const productoId = await this.getProductbyId(id);
             if (productoId != 'Not found') {
                 const nuevosProductos = productos.filter(producto => producto.id !== id);
@@ -111,7 +103,7 @@ export default class ProductManager {
             }
 
         } catch (error) {
-            console.log(error);
+            return error;
         }
     }
 }
