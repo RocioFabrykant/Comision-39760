@@ -12,10 +12,10 @@ export default class ProductManager {
                 producto.id = 1;
             } else {
                 producto.id = productos[productos.length - 1].id + 1;
-                if (productos.find(p => p.code === producto.code)) {
-                    console.log('el code ya existe');
-                    return 'el code ya existe';
+                if (productos.find(p => p.code === producto.code)||productos.find(p => p.title === producto.title)) {
+                    return 'El producto ya existe';
                 }
+
             }
             productos.push(producto);
 
@@ -25,7 +25,6 @@ export default class ProductManager {
 
 
         } catch (error) {
-            console.log('entro al error');
             return 'error';
         }
     }

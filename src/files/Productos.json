@@ -1,28 +1,31 @@
 [
 	{
-		"title": "tv",
-		"description": "para ver",
-		"code": 123,
-		"stock": 12,
-		"category": "electro",
+		"title": "yerba",
+		"description": "para tomar",
+		"category": "hogar",
+		"code": 4,
+		"stock": 13,
+		"price": 50,
 		"status": true,
 		"id": 1
 	},
 	{
-		"title": "proyector",
-		"description": "para ver",
-		"code": 125,
+		"title": "mate",
+		"description": "para tomar",
+		"category": "hogar",
+		"code": 5,
 		"stock": 13,
-		"category": "electro",
+		"price": 50,
 		"status": true,
 		"id": 2
 	},
 	{
-		"title": "proyector",
-		"description": "para ver",
-		"code": 126,
+		"title": "bombilla",
+		"description": "para tomar",
+		"category": "hogar",
+		"code": 7,
 		"stock": 13,
-		"category": "electro",
+		"price": 50,
 		"status": true,
 		"id": 3
 	}

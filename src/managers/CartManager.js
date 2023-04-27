@@ -17,7 +17,6 @@ export default class CartManager {
             await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
             return cart;
         } catch (error) {
-            console.log('entro en error')
             return error;
         }
     }
@@ -25,14 +24,12 @@ export default class CartManager {
         try {
             if (fs.existsSync(this.path)) {
                 const carts = JSON.parse(await fs.promises.readFile(this.path, 'utf-8'));
-                console.log(carts)
                 return carts;
 
             } else {
                 return [];
             }
         } catch (error) {
-            console.log('entro al error')
             return error;
 
         }
@@ -58,9 +55,7 @@ export default class CartManager {
         try {
             const carts = await this.getCarts();
             const indexCarts = carts.findIndex(c => c.id === idCarrito);
-            console.log(indexCarts)
             const indexProductos = carts[indexCarts].products.findIndex(p => p.id === idProducto);
-            console.log(indexProductos)
             if (indexProductos != -1) {
                 carts[indexCarts].products[indexProductos].quantity += 1;
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
@@ -71,7 +66,6 @@ export default class CartManager {
                     id: idProducto,
                     quantity: 1
                 }
-                console.log('es prod nuevo');
                 carts[indexCarts].products.push(producto);
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
 

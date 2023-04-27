@@ -4,7 +4,6 @@ import {
 import ProductManager from "../managers/productmanager.js";
 const router = Router();
 const productManager = new ProductManager('./src/files/Productos.json');
-//const productManager = new ProductManager('C:\Users\rfabryka\Documents\BACKEND\DesafioEntregable1\src\files\Products.json');
 
 router.get('/', async (req, res) => {
 
@@ -41,16 +40,23 @@ router.get('/:pid', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const producto = req.body;
+    
+    
     if (!producto.status) {
         producto.status = true;
     }
 
-    if (!producto.title || !producto.description || !producto.code || !producto.category || !producto.stock) {
+    if (!producto.title || !producto.description || !producto.code || !producto.category || !producto.stock || !producto.price) {
         return res.status(400).send({
             error: 'incomplete values'
         });
     }
     const rdo = await productManager.addProduct(producto);
+    if(rdo!="El producto ya existe"){
+        const io = req.app.get('socketio');
+        io.emit('showProducts', await productManager.getProducts());
+    }
+        
     res.send({
         add: producto,
         result: rdo
@@ -82,7 +88,12 @@ router.put('/:pid', async (req, res) => {
 router.delete('/:pid', async (req, res) => {
     const productId = Number(req.params.pid);
     const eliminaProducto = await productManager.deleteProduct(productId);
+    
+    
+    
     if (eliminaProducto != 'Not found') {
+        const io = req.app.get('socketio');
+        io.emit('showProducts', await productManager.getProducts());
         return res.send({
             status: 'success',
             message: 'product deleted',
@@ -93,7 +104,6 @@ router.delete('/:pid', async (req, res) => {
         message: eliminaProducto
     })
 })
-
 
 
 export default router;
