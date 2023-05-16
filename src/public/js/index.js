@@ -2,7 +2,7 @@ const socket = io();
 
 const container = document.getElementById('container');
 
-socket.on('showProducts',data=>{
+socket.on('showProducts', data => {
     container.innerHTML = '';
     data.forEach(prod => {
         container.innerHTML += `

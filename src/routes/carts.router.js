@@ -1,54 +1,80 @@
 import {
     Router
 } from 'express';
-import CartManager from '../managers/CartManager.js';
+
+import Carts from '../dao/dbManagers/carts.js';
 
 const router = Router();
-const cartManager = new CartManager('./src/files/Carts.json');
+const cartManager = new Carts();
 
 
 router.post('/', async (req, res) => {
     const cart = {
         products: []
     }
-    const result = await cartManager.addCart(cart);
-    res.send({
-        status: 'success',
-        result
-    })
+    try {
+        const result = await cartManager.save(cart);
+        res.send({
+            status: 'success',
+            payload: result
+        })
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+
 })
 
 router.get('/:cid', async (req, res) => {
-    const cartId = Number(req.params.cid);
-    const cart = await cartManager.getById(cartId)
-    if (cart === 'Not Found') {
-        return res.status(404).send({
-            error: 'error',
-            message: 'Cart not found'
+    const cartId = req.params.cid;
+    try {
+        const cart = await cartManager.getById(cartId)
+
+        res.send({
+            status: 'success',
+            payload: cart
         })
+    } catch (error) {
+        console.log('error');
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+
     }
-    res.send({
-        status: 'success',
-        cart
-    })
+
+
 })
 
 router.post('/:cid/product/:pid', async (req, res) => {
-    const idProducto = Number(req.params.pid);
-    const idCarrito = Number(req.params.cid);
-
-    const cart = await cartManager.getById(idCarrito);
-    if (cart != 'Not Found') {
-        const prodAgregado = await cartManager.addProduct(idProducto, idCarrito);
+    const idProducto = req.params.pid;
+    const idCarrito = req.params.cid;
+    try {
+        await cartManager.getById(idCarrito);
+        const producto = {
+            id: idProducto,
+            quantity: 1
+        }
+        const prodAgregado = await cartManager.update(idCarrito, producto);
         return res.send({
             status: 'success',
             prodAgregado
         });
     }
-    res.status(404).send({
-        error: 'error',
-        message: 'Cart not found'
-    });
+    // }    res.status(404).send({
+    // error: 'error',
+    // message: 'Cart not found'});
+    catch (error) {
+
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+
+
 })
 
 export default router;
