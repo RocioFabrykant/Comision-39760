@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {
     cartModel
 } from '../models/carts.js'
@@ -13,16 +14,76 @@ export default class Carts {
         return carts;
     }
     getById = async (id) => {
-        // const cart = await cartModel.findById(id);
         const cart = await cartModel.findOne({
             _id: id
-        })
+        }).populate('products').lean();
         return cart;
+
     }
 
     save = async (cart) => {
         const result = await cartModel.create(cart);
         return result;
+    }
+
+    deleteProduct = async (idCarrito, idProducto) => {
+        const rdo = await cartModel.updateOne({
+            _id: idCarrito,
+            "products.id": idProducto
+        }, {
+            $pull: {
+                "products": {
+                    "id": idProducto
+                }
+            }
+        });
+
+        return rdo;
+
+    }
+
+    deleteProducts = async (idCarrito) => {
+        const rdo = await cartModel.updateOne({
+            _id: idCarrito
+        }, {
+            $set: {
+                products: []
+            }
+        }, {
+            'new': true,
+            'safe': true,
+            'upsert': true
+        });
+
+        return rdo;
+    }
+
+    updateProducts = async (id, products) => {
+        const newCart = await cartModel.updateOne({
+            _id: id
+        }, {
+            $set: {
+                products: products
+            }
+        })
+        return newCart;
+    }
+
+    updateQuantity = async (idCarrito, idProducto, cantidad) => {
+        const newQuantity = await cartModel.updateOne({
+            _id: idCarrito
+        }, {
+            $set: {
+                "products.$[elem].quantity": cantidad
+            }
+        }, {
+            arrayFilters: [{
+                "elem.id": idProducto
+            }],
+            upsert: true
+        })
+
+        return newQuantity;
     }
 
     update = async (id, product) => {

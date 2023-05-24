@@ -47,6 +47,44 @@ router.get('/:cid', async (req, res) => {
 
 
 })
+router.put('/:cid', async (req,res)=>{
+    const idCarrito = req.params.cid;
+    //arreglo viene en body
+    const productos = req.body;
+    try{
+        const resultado = await cartManager.updateProducts(idCarrito,productos);
+        return res.send({
+            status: 'success',
+            resultado
+        });
+
+    }catch(error){
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+})
+
+router.put('/:cid/products/:pid', async (req,res)=>{
+    const idCarrito = req.params.cid;
+    const idProducto = Number(req.params.pid);
+
+    const {quantity} = req.body;
+    
+    try{
+        const cantidadUpdate = await cartManager.updateQuantity(idCarrito,idProducto,quantity)
+        return res.send({
+            status: 'success',
+            cantidadUpdate
+        });
+    }catch(error){
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+})
 
 router.post('/:cid/product/:pid', async (req, res) => {
     const idProducto = req.params.pid;
@@ -76,5 +114,42 @@ router.post('/:cid/product/:pid', async (req, res) => {
 
 
 })
+router.delete('/:cid/products/:pid', async (req, res) => {
+    const idProducto = req.params.pid;
+    const idCarrito = req.params.cid;
+    try {
+        await cartManager.getById(idCarrito);
+        const result = await cartManager.deleteProduct(idCarrito,idProducto);
+        res.send({
+            status: 'success',
+            payload: result
+        })
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+
+})
+
+router.delete('/:cid', async (req, res) => {
+    const idCarrito = req.params.cid;
+    try {
+        await cartManager.getById(idCarrito);
+        const result = await cartManager.deleteProducts(idCarrito);
+        res.send({
+            status: 'success',
+            payload: result
+        })
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+
+})
+
 
 export default router;

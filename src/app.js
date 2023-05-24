@@ -30,6 +30,8 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/realtimeproducts', viewsRouter);
 app.use('/chat', viewsRouter);
+app.use('/products', viewsRouter)
+app.use('/carts/:cid', viewsRouter);
 
 try {
     await mongoose.connect('mongodb+srv://fabrykantr:m19w444GvyS34fvF@cluster39760rf.l5l8vvj.mongodb.net/ecommerce?retryWrites=true&w=majority')

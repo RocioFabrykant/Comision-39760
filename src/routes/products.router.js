@@ -10,25 +10,28 @@ const productManager = new Products();
 
 router.get('/', async (req, res) => {
     try {
-        const productResult = await productManager.getAll();
-        //LIMIT
-        const limit = Number(req.query.limit);
-        if (limit > productResult.length || limit <= 0) {
-            return res.status(400).send("limite incorrecto");
-        } else if (!limit) {
-            return res.send({
-                status: 'success',
-                payload: productResult
-            });
 
-        }
-        console.log(productResult.length)
-        const nuevoArreglo = productResult.slice(0, limit);
+        const {page=1,limit=10, sort="", query=""} = req.query;
+  
+        const productResult = await productManager.getAll(limit,page,sort,query);
+            if(productResult.hasPrevPage){
+                    productResult.prevLink = productResult.prevPage;
+            }else{
+                productResult.prevLink = null;
+            }
 
+            if(productResult.hasNextPage){
+                productResult.nextLink = productResult.nextPage;
+
+            }else{
+                productResult.nextLink = null;
+            }
         res.send({
             status: 'success',
-            payload: nuevoArreglo
+            payload: productResult
         });
+
+        
     } catch (error) {
         res.status(500).send({
             status: 'error',
