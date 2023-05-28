@@ -16,7 +16,8 @@ export default class Carts {
     getById = async (id) => {
         const cart = await cartModel.findOne({
             _id: id
-        }).populate('products').lean();
+        })
+        console.log(JSON.stringify(cart,null, '\t'))
         return cart;
 
     }
@@ -29,11 +30,11 @@ export default class Carts {
     deleteProduct = async (idCarrito, idProducto) => {
         const rdo = await cartModel.updateOne({
             _id: idCarrito,
-            "products.id": idProducto
+            "products.product": idProducto
         }, {
             $pull: {
                 "products": {
-                    "id": idProducto
+                    "product": idProducto
                 }
             }
         });
@@ -78,7 +79,7 @@ export default class Carts {
             }
         }, {
             arrayFilters: [{
-                "elem.id": idProducto
+                "elem._id": idProducto
             }],
             upsert: true
         })
@@ -90,14 +91,14 @@ export default class Carts {
         const cart = await cartModel.findOne({
             _id: id
         }).lean()
-        const rdo = cart.products.findIndex(e => e.id === product.id)
+        const rdo = cart.products.findIndex(e => e.product === product.product)
         if (rdo != -1) {
             const cantidad = (cart.products[rdo].quantity) + 1;
             const resultado = await cartModel.updateOne({
                 _id: id,
                 products: {
                     $elemMatch: {
-                        id: product.id
+                        product: product.product
                     }
                 }
             }, {

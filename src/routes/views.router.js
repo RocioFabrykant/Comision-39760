@@ -3,7 +3,6 @@ import {
 } from 'express';
 import Products from '../dao/dbManagers/products.js';
 import Carts from '../dao/dbManagers/carts.js'
-
 const router = Router();
 const productManager = new Products();
 const cartManager = new Carts()
@@ -50,6 +49,33 @@ router.get('/carts/:cid', async (req, res) => {
 
 
 })
+
+router.get('/addtocart/product/:pid', async (req, res) => {
+    
+    const prodId = req.params.pid;
+    try {
+        const cart = {
+            products: []
+        }
+        const cartcreated = await cartManager.save(cart);
+        const cartId = cartcreated._id;
+        const producto = {
+            _id:prodId,
+            quantity: 1
+            
+        }
+        await cartManager.update(cartId,producto);
+        const addtoCart = await cartManager.getById(cartId)
+        res.render('cart', {
+            cart: addtoCart})
+            
+    } catch (error) {
+        console.log(error);
+    }
+
+
+})
+
 
 router.get('/realtimeproducts', async (req, res) => {
     try {

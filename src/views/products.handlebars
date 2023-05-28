@@ -1,4 +1,5 @@
 <div>
+
     <h1>Bienvenidos a los productos</h1>
     {{#each products}}
     <div>
@@ -8,9 +9,9 @@
         <p>Stock: {{this.stock}}</p>
         <p>Categoria: {{this.category}}</p>
         <p>Status: {{this.status}}</p>
-        <p>ID: {{this.id}}</p>
-
-        <button>Agregar al carrito</button>
+        <p>ID: {{this._id}}<p/>
+        <a href="/addtocart/product/{{this._id}}"><button>Agregar al carrito</button></a>
+        
     </div>
     <br><br>
     {{/each}}
@@ -23,3 +24,4 @@
     <a href="/products?page={{nextPage}}&limit=1"><button>Siguiente</button></a>
     {{/if}}
 </div>
+

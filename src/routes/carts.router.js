@@ -68,7 +68,7 @@ router.put('/:cid', async (req,res)=>{
 
 router.put('/:cid/products/:pid', async (req,res)=>{
     const idCarrito = req.params.cid;
-    const idProducto = Number(req.params.pid);
+    const idProducto = req.params.pid;
 
     const {quantity} = req.body;
     
@@ -92,7 +92,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
     try {
         await cartManager.getById(idCarrito);
         const producto = {
-            id: idProducto,
+            _id: idProducto,
             quantity: 1
         }
         const prodAgregado = await cartManager.update(idCarrito, producto);
@@ -101,9 +101,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
             prodAgregado
         });
     }
-    // }    res.status(404).send({
-    // error: 'error',
-    // message: 'Cart not found'});
+
     catch (error) {
 
         res.status(500).send({
