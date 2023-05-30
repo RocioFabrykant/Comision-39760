@@ -7,6 +7,29 @@ const router = Router();
 const productManager = new Products();
 const cartManager = new Carts()
 
+const publicAccess = (req,res,next)=>{
+    if(req.session.user) return res.redirect('/products');
+    next();
+}
+const privateAccess = (req,res,next)=>{
+    if(!req.session.user) return res.redirect('/login');
+    next();
+}
+router.get('/register',publicAccess, (req,res)=>{
+    res.render('register')
+})
+
+router.get('/login',publicAccess,(req,res)=>{
+    res.render('login');
+})
+
+router.get('/',privateAccess,(req,res)=>{
+    res.render('profile',{
+        user:req.session.user
+    });
+})
+
+//aca le sacamos products y le agregamos el private
 router.get('/products', async (req, res) => {
     const {
         page = 1, limit = 1, sort = "", query = ""
@@ -25,6 +48,7 @@ router.get('/products', async (req, res) => {
         const products = docs;
 
         res.render('products', {
+            user:req.session.user,
             products,
             hasPrevPage,
             hasNextPage,
@@ -92,6 +116,8 @@ router.get('/realtimeproducts', async (req, res) => {
 router.get('/chat', (req, res) => {
     res.render('chat');
 });
+
+
 
 
 export default router;

@@ -14,9 +14,14 @@ export default class Carts {
         return carts;
     }
     getById = async (id) => {
+        //
+        
         const cart = await cartModel.findOne({
             _id: id
-        })
+        }).populate({ path: 'products.product', select: 'title' }).lean();
+        //console.log(cart.products.product.title);
+        // populate({path: "products.product", select: "title"}).lean();
+
         console.log(JSON.stringify(cart,null, '\t'))
         return cart;
 
@@ -112,13 +117,15 @@ export default class Carts {
             })
             return resultado;
         }
-        const result = await cartModel.updateOne({
-            _id: id
-        }, {
-            $push: {
-                products: product
-            }
-        });
+        cart.products.push({product})
+        // const result = await cartModel.updateOne({
+        //     _id: id
+        // }, {
+        //     $push: {
+        //         products: product
+        //     }
+        // });
+        const result = await cartModel.updateOne({_id:id},cart)
         return result;
     }
 }

@@ -73,7 +73,9 @@ router.put('/:cid/products/:pid', async (req,res)=>{
     const {quantity} = req.body;
     
     try{
+        
         const cantidadUpdate = await cartManager.updateQuantity(idCarrito,idProducto,quantity)
+    
         return res.send({
             status: 'success',
             cantidadUpdate
