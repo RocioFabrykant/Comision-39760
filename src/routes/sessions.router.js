@@ -1,63 +1,80 @@
-import {Router} from 'express'
-import userModel from '../dao/models/users.js'
+import {
+    Router
+} from 'express'
+import passport from 'passport'
+
 
 const router = Router();
 
-router.post('/register',async (req,res)=>{
-    try{
-        const {first_name,last_name,email,age,password} = req.body;
-        const exists = await userModel.findOne({email});
-        if(exists) return res.status(400).send({status:'error',error:'usuario ya existe'})
-        const user = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password
-        }
+router.post('/register', passport.authenticate('register', {
+    failureRedirect: 'fail-register'
+}), async (req, res) => {
 
-        await userModel.create(user);
-        res.send({status:'success',message:'user registered'})
-    }catch(error){
-        return res.status(500).send({status:'error',error:error})
-    }
+    res.send({
+        status: 'success',
+        message: 'user registered'
+    })
+
+})
+router.get('/fail-register', async (req, res) => {
+    res.send({
+        status: 'error',
+        message: 'register failed'
+    })
 })
 
-router.post('/login', async(req,res)=>{
-    try{
-    
-    const {email,password} = req.body;
+router.post('/login', passport.authenticate('login', {
+    failureRedirect: 'fail-login'
+}), async (req, res) => {
 
-    if(email==="adminCoder@coder.com" && password==="adminCod3r123"){
-        req.session.user = {
-
-        name: 'Admin',
-        email:'adminCoder@coder.com',
-        role: 'admin' }
-
-    }else{
-             
-    
-    const user = await userModel.findOne({email,password});
-
-    if(!user) return res.status(400).send({status:'error', error:'Incorrect credentials'});
+    if (!req.user) return res.status(400).send({
+        status: 'error',
+        error: 'User not found'
+    });
 
     req.session.user = {
-        name: `${user.first_name} ${user.last_name}`,
-        email:user.email,
-        role:'user'
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email
     }
-
-}    
-return res.send({status:'success',message:'login exitoso'})
-}catch(error){
-    return res.status(500).send({status:'error',error:error})
-}
+    res.send({
+        status: 'success',
+        message: 'Login success'
+    })
+})
+router.get('/fail-login', async (req, res) => {
+    res.send({
+        status: 'error',
+        message: 'login failed'
+    })
 })
 
-router.get('/logout', (req,res)=>{
-    req.session.destroy(err=>{
-        if(err) return res.status(500).send({status:'error',error:'logout fail'});
+router.get('/github', passport.authenticate(
+    'github', {
+        scope: ['user:email']
+    }
+), async (req, res) => {
+    res.send({
+        status: "success",
+        message: "User registered"
+    })
+});
+
+router.get('/github-callback', passport.authenticate(
+    'github', {
+        failureRedirect: '/login'
+    }
+), async (req, res) => {
+    req.session.user = req.user;
+    res.redirect('/')
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) return res.status(500).send({
+            status: 'error',
+            error: 'logout fail'
+        });
         res.redirect('/')
     })
 })

@@ -1,33 +1,33 @@
 const form = document.getElementById('loginForm');
 
- 
 
-form.addEventListener('submit',e=>{
+
+form.addEventListener('submit', e => {
 
     e.preventDefault();
 
     const data = new FormData(form);
 
     const obj = {};
-    
-    data.forEach((value,key)=>obj[key]=value);
-    fetch('/api/sessions/login',{
 
-        method:'POST',
+    data.forEach((value, key) => obj[key] = value);
+    fetch('/api/sessions/login', {
 
-        body:JSON.stringify(obj),
+        method: 'POST',
 
-        headers:{
+        body: JSON.stringify(obj),
 
-            'Content-Type':'application/json'
+        headers: {
+
+            'Content-Type': 'application/json'
 
         }
 
-    }).then(result=>{
+    }).then(result => {
 
-        if(result.status===200){
+        if (result.status === 200) {
 
-            window.location.replace('/products');
+            window.location.replace('/');
 
         }
 

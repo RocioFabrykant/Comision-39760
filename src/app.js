@@ -14,6 +14,9 @@ import Messages from './dao/dbManagers/messages.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import sessionsRouter from './routes/sessions.router.js'
+import passport from 'passport';
+import initializePassport from './config/passport.config.js'
+
 const messageManager = new Messages();
 const app = express();
 try {
@@ -40,6 +43,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
@@ -47,7 +55,7 @@ app.use('/realtimeproducts', viewsRouter);
 app.use('/chat', viewsRouter);
 app.use('/products', viewsRouter)
 app.use('/carts/:cid', viewsRouter);
-app.use('/api/sessions',sessionsRouter);
+app.use('/api/sessions', sessionsRouter);
 
 
 
@@ -63,7 +71,7 @@ io.on('connection', socket => {
     socket.on('message', async data => {
         messageManager.save(data);
 
-        io.emit('messageLogs', await messageManager.getAll()); //envio a todos los clientes el log de mesjes
+        io.emit('messageLogs', await messageManager.getAll());
     })
     socket.on('authenticated', async data => {
         socket.emit('messageLogs', await messageManager.getAll());
