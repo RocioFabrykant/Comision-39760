@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
     }
     try {
         const result = await cartManager.save(cart);
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: result
         })
@@ -32,7 +32,7 @@ router.get('/:cid', async (req, res) => {
     try {
         const cart = await cartManager.getById(cartId)
 
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: cart
         })
@@ -49,11 +49,10 @@ router.get('/:cid', async (req, res) => {
 })
 router.put('/:cid', async (req,res)=>{
     const idCarrito = req.params.cid;
-    //arreglo viene en body
     const productos = req.body;
     try{
         const resultado = await cartManager.updateProducts(idCarrito,productos);
-        return res.send({
+        return res.status(200).send({
             status: 'success',
             resultado
         });
@@ -76,7 +75,7 @@ router.put('/:cid/products/:pid', async (req,res)=>{
         
         const cantidadUpdate = await cartManager.updateQuantity(idCarrito,idProducto,quantity)
     
-        return res.send({
+        return res.status(200).send({
             status: 'success',
             cantidadUpdate
         });
@@ -120,7 +119,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     try {
         await cartManager.getById(idCarrito);
         const result = await cartManager.deleteProduct(idCarrito,idProducto);
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: result
         })
@@ -138,7 +137,7 @@ router.delete('/:cid', async (req, res) => {
     try {
         await cartManager.getById(idCarrito);
         const result = await cartManager.deleteProducts(idCarrito);
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: result
         })

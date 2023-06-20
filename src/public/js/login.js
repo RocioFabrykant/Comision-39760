@@ -2,7 +2,7 @@ const form = document.getElementById('loginForm');
 
 
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
 
     e.preventDefault();
 
@@ -11,14 +11,14 @@ form.addEventListener('submit', e => {
     const obj = {};
 
     data.forEach((value, key) => obj[key] = value);
-    fetch('/api/sessions/login', {
+    fetch('/api/auth/login', {
 
         method: 'POST',
 
         body: JSON.stringify(obj),
 
         headers: {
-
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
 
         }
@@ -27,8 +27,11 @@ form.addEventListener('submit', e => {
 
         if (result.status === 200) {
 
-            window.location.replace('/');
+            window.location.replace('/api/auth/current');
+            window.alert('Login exitoso')
 
+        }else if(result.status === 401){
+            window.alert('Login invalido')
         }
 
     })

@@ -3,8 +3,9 @@
     <div>
          <p>Carrito: {{cart._id}}</p>
         {{#each cart.products}}   
-        <p>id: {{this._id}}</p>
+        <p>id: {{this.product._id}}</p>
         <p>quantity: {{this.quantity}}</p>
+        <p>title:{{this.product.title}}</p>
         {{/each}}
 
     </div>

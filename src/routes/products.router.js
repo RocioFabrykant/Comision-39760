@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
             }else{
                 productResult.nextLink = null;
             }
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: productResult
         });
@@ -47,7 +47,7 @@ router.get('/:pid', async (req, res) => {
     try {
 
         const elProducto = await productManager.getById(productId);
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: elProducto
         });
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
             io.emit('showProducts', await productManager.getAll());
         }
 
-        res.send({
+        res.status(200).send({
             status: 'success',
             add: producto,
             payload: rdo
@@ -106,7 +106,7 @@ router.put('/:pid', async (req, res) => {
     }
     try {
         const elProducto = await productManager.update(id, producto);
-        res.send({
+        res.status(200).send({
             status: 'success',
             payload: elProducto
         });

@@ -9,13 +9,17 @@ import {
     Server
 } from 'socket.io';
 import viewsRouter from './routes/views.router.js'
+import authRouter from './routes/auth.router.js'
+
+import cookieParser from 'cookie-parser';
+import initializePassport from './config/passport.config.js'
 import mongoose from 'mongoose';
 import Messages from './dao/dbManagers/messages.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import sessionsRouter from './routes/sessions.router.js'
 import passport from 'passport';
-import initializePassport from './config/passport.config.js'
+
 
 const messageManager = new Messages();
 const app = express();
@@ -29,24 +33,27 @@ app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
 app.use(express.static(`${__dirname}/public`))
 
+
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }))
 
-app.use(session({
-    store: MongoStore.create({
-        client: mongoose.connection.getClient(),
-        ttl: 3600
-    }),
-    secret: 'Coder39760',
-    resave: true,
-    saveUninitialized: true
-}))
-
+// app.use(session({
+//     store: MongoStore.create({
+//         client: mongoose.connection.getClient(),
+//         ttl: 3600
+//     }),
+//     secret: 'Coder39760',
+//     resave: true,
+//     saveUninitialized: true
+// }))
+app.use(cookieParser());
 initializePassport();
 app.use(passport.initialize());
-app.use(passport.session());
+
+//app.use(passport.session());
+app.use('/api/auth', authRouter);
 
 app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);

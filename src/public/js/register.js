@@ -2,7 +2,7 @@ const form = document.getElementById('registerForm');
 
  
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit',async e => {
 
     e.preventDefault();
 
@@ -12,14 +12,13 @@ form.addEventListener('submit', e => {
 
     data.forEach((value, key) => obj[key] = value);
 
-    fetch('/api/sessions/register', {
+    fetch('/api/auth/register', {
 
         method: 'POST',
 
         body: JSON.stringify(obj),
 
         headers: {
-
             'Content-Type': 'application/json'
 
         }
@@ -27,11 +26,16 @@ form.addEventListener('submit', e => {
     }).then(result => {
 
         if (result.status === 200) {
+            window.alert('Registro exitoso')
+           // window.location.replace('/');
 
-            window.location.replace('/');
-
-        }
-
+        }else if(result.status === 400){
+            window.alert('Registro invalido. Complete los campos requeridos')
+        }else if(result.status === 401){
+            window.alert('Usuario existente')}        
     });
+
+    
+ 
 
 })

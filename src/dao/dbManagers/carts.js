@@ -23,6 +23,7 @@ export default class Carts {
         // populate({path: "products.product", select: "title"}).lean();
 
         console.log(JSON.stringify(cart,null, '\t'))
+        //console.log(cart)
         return cart;
 
     }
@@ -96,14 +97,15 @@ export default class Carts {
         const cart = await cartModel.findOne({
             _id: id
         }).lean()
-        const rdo = cart.products.findIndex(e => e.product === product.product)
+        const rdo = cart.products.findIndex(e => e.product == product._id)
+        console.log(rdo);
         if (rdo != -1) {
             const cantidad = (cart.products[rdo].quantity) + 1;
             const resultado = await cartModel.updateOne({
                 _id: id,
                 products: {
                     $elemMatch: {
-                        product: product.product
+                        product: product._id
                     }
                 }
             }, {

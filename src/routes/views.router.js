@@ -7,27 +7,27 @@ const router = Router();
 const productManager = new Products();
 const cartManager = new Carts()
 
-const publicAccess = (req, res, next) => {
-    if (req.session.user) return res.redirect('/');
-    next();
-}
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) return res.redirect('/login');
-    next();
-}
-router.get('/register', publicAccess, (req, res) => {
+// const publicAccess = (req, res, next) => {
+//     if (req.session.user) return res.redirect('/');
+//     next();
+// }
+// const privateAccess = (req, res, next) => {
+//     if (!req.session.user) return res.redirect('/login');
+//     next();
+// }
+router.get('/register',  (req, res) => {
     res.render('register')
 })
 
-router.get('/login', publicAccess, (req, res) => {
+router.get('/login',  (req, res) => {
     res.render('login');
 })
 
-router.get('/', privateAccess, (req, res) => {
-    res.render('profile', {
-        user: req.session.user
-    });
-})
+// router.get('/', privateAccess, (req, res) => {
+//     res.render('profile', {
+//         user: req.session.user
+//     });
+// })
 
 router.get('/products', async (req, res) => {
     const {
@@ -73,15 +73,15 @@ router.get('/carts/:cid', async (req, res) => {
 
 })
 
-router.get('/addtocart/product/:pid', async (req, res) => {
-
+router.get('/addtocart/:cid/product/:pid', async (req, res) => {
+    const cartId = req.params.cid;
     const prodId = req.params.pid;
     try {
-        const cart = {
-            products: []
-        }
-        const cartcreated = await cartManager.save(cart);
-        const cartId = cartcreated._id;
+        // const cart = {
+        //     products: []
+        // }
+        //const cartcreated = await cartManager.save(cart);
+        //const cartId = cartcreated._id;
         const producto = {
             _id: prodId,
             quantity: 1
