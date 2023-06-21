@@ -3,9 +3,11 @@ import {
 } from 'express';
 import Products from '../dao/dbManagers/products.js';
 import Carts from '../dao/dbManagers/carts.js'
+import passport from 'passport';
 const router = Router();
 const productManager = new Products();
 const cartManager = new Carts()
+
 
 // const publicAccess = (req, res, next) => {
 //     if (req.session.user) return res.redirect('/');
@@ -29,7 +31,7 @@ router.get('/login',  (req, res) => {
 //     });
 // })
 
-router.get('/products', async (req, res) => {
+router.get('/products',passport.authenticate('jwt',{session:false}), async (req, res) => {
     const {
         page = 1, limit = 1, sort = "", query = ""
     } = req.query;
@@ -47,7 +49,7 @@ router.get('/products', async (req, res) => {
         const products = docs;
 
         res.render('products', {
-            user: req.session.user,
+            user: req.user,
             products,
             hasPrevPage,
             hasNextPage,

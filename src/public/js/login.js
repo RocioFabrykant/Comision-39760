@@ -27,13 +27,13 @@ form.addEventListener('submit', async e => {
 
         if (result.status === 200) {
 
-            window.location.replace('/api/auth/current');
+            window.location.replace('/products');
             window.alert('Login exitoso')
 
         }else if(result.status === 401){
             window.alert('Login invalido')
         }
-
+///api/auth/current
     })
 
 })

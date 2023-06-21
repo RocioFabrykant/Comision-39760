@@ -2,12 +2,15 @@
     <div>
 
     <h1>Tu perfil (sin datos sensibles)</h1>
-    <p>{{user.name}}</p>
+    <p>{{user.first_name}}</p>
+    <p>{{user.last_name}}</p>
+    <p>{{user.role}}</p>
+    <p>{{user.age}}</p>
     <p>{{user.email}}</p>
 
 
 
-    <a href="/api/sessions/logout"><button>Salir</button></a>
+    {{!-- <a href="/api/sessions/logout"><button>Salir</button></a> --}}
 
     </div>
 
@@ -21,7 +24,7 @@
         <p>Categoria: {{this.category}}</p>
         <p>Status: {{this.status}}</p>
         <p>ID: {{this._id}}<p/>
-        <a href="/addtocart/product/{{this._id}}"><button>Agregar al carrito</button></a>
+        <a href="/addtocart/647367f3d5ff75ba5dab6f0c/product/{{this._id}}"><button>Agregar al carrito</button></a>
         
     </div>
     <br><br>
