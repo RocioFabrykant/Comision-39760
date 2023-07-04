@@ -1,6 +1,7 @@
 import express, {
     urlencoded
 } from 'express';
+import './dao/dbManagers/dbConfig.js'
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import handlebars from 'express-handlebars';
@@ -23,11 +24,11 @@ import passport from 'passport';
 
 const messageManager = new Messages();
 const app = express();
-try {
-    await mongoose.connect('mongodb+srv://fabrykantr:m19w444GvyS34fvF@cluster39760rf.l5l8vvj.mongodb.net/ecommerce?retryWrites=true&w=majority')
-} catch (error) {
-    console.log(error);
-}
+// try {
+//     await mongoose.connect('mongodb+srv://fabrykantr:m19w444GvyS34fvF@cluster39760rf.l5l8vvj.mongodb.net/ecommerce?retryWrites=true&w=majority')
+// } catch (error) {
+//     console.log(error);
+// }
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
@@ -44,7 +45,7 @@ app.use(express.urlencoded({
 //         client: mongoose.connection.getClient(),
 //         ttl: 3600
 //     }),
-//     secret: 'Coder39760',
+//     secret: config.secretOrKey,
 //     resave: true,
 //     saveUninitialized: true
 // }))

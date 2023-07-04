@@ -1,6 +1,7 @@
 import passport from 'passport'
 import jwt from 'passport-jwt'
 import local from 'passport-local'
+import config from '../config/config.js'
 import userModel from '../dao/models/users.js'
 import {
     createHash,
@@ -11,11 +12,11 @@ import GitHubStrategy from 'passport-github2'
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-
+const key = config.secretOrKey;
 const initializePassport = () => {
     passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: 'coder39760'
+        secretOrKey: key
 
     }, async (jwt_payload, done) => {
         try {
