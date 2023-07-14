@@ -1,10 +1,12 @@
 import {Router} from 'express'
 import { authToken,generateToken, passportCall,isValidPassword,createHash,authorization } from '../utils.js';
 import Users from '../dao/dbManagers/users.js';
+import UserRepository from '../repositories/users.repository.js';
 import passport from 'passport';
 const router = Router();
 
 const usersManager = new Users();
+const userRepository = new UserRepository();
 router.post('/register',async (req,res)=>{
     try{
         const {first_name,last_name,email,age,role,password} = req.body;
@@ -47,12 +49,13 @@ router.post('/login', async(req,res)=>{
 
 })
 
-router.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
-    res.send({status:'success',payload:req.user})
+router.get('/current',passport.authenticate('jwt',{session:false}),async (req,res)=>{
+    const user = await userRepository.getUserByEmail(req.user.email);
+    res.send({status:'success',payload:user})
 })
 
-// router.get('/current-custom',passportCall('jwt'),authorization('user'),(req,res)=>{
-//     res.send({status:'success',payload:req.user})
-// })
+router.get('/current-custom',passportCall('jwt'),authorization('admin'),(req,res)=>{
+    res.send({status:'success',payload:req.user})
+})
 
 export default router;

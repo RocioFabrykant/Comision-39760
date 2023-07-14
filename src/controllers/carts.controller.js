@@ -4,7 +4,8 @@ import {saveCart as saveCartService,
     updateCartQuantity as updateCartQuantityService,
     updateCartProduct as updateCartProductService,
     deleteCartProduct as deleteCartProductService,
-    deleteCartProducts as deleteCartProductsService} from '../services/carts.service.js'
+    deleteCartProducts as deleteCartProductsService,
+createPurchase as createPurchaseService} from '../services/carts.service.js'
 const addCart = async (req,res)=>{
     const cart = {
         products: []
@@ -140,6 +141,23 @@ const deleteCart = async (req,res) =>{
         });
     }
 }
+const createPurchase = async (req,res)=>{
+    const carrito = req.params.cid;
+    try{
+        const result = await createPurchaseService(carrito);
+        console.log(result)
+        res.status(200).send({
+            status: 'success',
+            payload: result
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+}
 export {
     addCart,
     getCart,
@@ -147,5 +165,6 @@ export {
     updateCartQuantity,
     updateCartProduct,
     deleteCartProduct,
-    deleteCart
+    deleteCart,
+    createPurchase
 }

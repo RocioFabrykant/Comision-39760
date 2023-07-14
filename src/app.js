@@ -19,6 +19,7 @@ import Messages from './dao/dbManagers/messages.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import sessionsRouter from './routes/sessions.router.js'
+import usersRouter from './routes/users.router.js'
 import passport from 'passport';
 
 
@@ -64,6 +65,7 @@ app.use('/chat', viewsRouter);
 app.use('/products', viewsRouter)
 app.use('/carts/:cid', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/users',usersRouter)
 
 
 

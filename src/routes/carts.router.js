@@ -1,7 +1,7 @@
 import {
     Router
 } from 'express';
-
+import {passportCall,authorization} from '../utils.js'
 //import Carts from '../dao/dbManagers/carts.js';
 import {addCart,
     getCart,
@@ -9,18 +9,19 @@ import {addCart,
     updateCartQuantity,
     updateCartProduct,
     deleteCartProduct,
-    deleteCart} from '../controllers/carts.controller.js'
+    deleteCart,
+    createPurchase} from '../controllers/carts.controller.js'
 
 const router = Router();
 //const cartManager = new Carts();
 
 
 router.post('/', addCart)
-
+router.get('/:cid/purchase',createPurchase)
 router.get('/:cid', getCart)
 router.put('/:cid', updateCart)
 router.put('/:cid/products/:pid', updateCartQuantity)
-router.post('/:cid/product/:pid', updateCartProduct)
+router.post('/:cid/product/:pid',passportCall('jwt'),authorization('user'), updateCartProduct)
 
 router.delete('/:cid/products/:pid', deleteCartProduct)
 

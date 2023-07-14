@@ -1,7 +1,7 @@
 import {
-    Router,
-    response
+    Router
 } from 'express';
+import {passportCall,authorization} from '../utils.js'
 //import Products from '../dao/dbManagers/products.js';
 import {    getProducts,
     getProduct,
@@ -16,9 +16,9 @@ router.get('/', getProducts)
 
 router.get('/:pid', getProduct)
 
-router.post('/', saveProduct)
+router.post('/',passportCall('jwt'),authorization('admin'), saveProduct)
 
-router.put('/:pid', updateProduct)
+router.put('/:pid',passportCall('jwt'),authorization('admin'), updateProduct)
 
 // router.delete('/:pid', async (req, res) => {
 //     const productId = Number(req.params.pid);
