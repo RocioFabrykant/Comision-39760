@@ -22,5 +22,8 @@ export default class ProductRepository{
         const result = await this.dao.update(id,product);
         return result;
     }
+    updateStock = async ()=>{
+        
+    }
    
 }

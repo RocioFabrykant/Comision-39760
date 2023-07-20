@@ -22,7 +22,7 @@ export default class Carts {
         
         const cart = await cartModel.findOne({
             _id: id
-        }).populate({ path: 'products.product', select: 'title' }).lean();
+        }).populate('products.product').lean();
         //console.log(cart.products.product.title);
         // populate({path: "products.product", select: "title"}).lean();
 
@@ -138,6 +138,7 @@ export default class Carts {
         const cart = await cartModel.findOne({
             _id: idCarrito
         })
+        //.populate({path:'products.product', select:'stock'}).lean();
         .populate('products.product').lean();
        // return cart;
         //let newarray = [];

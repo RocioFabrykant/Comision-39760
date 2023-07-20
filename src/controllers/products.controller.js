@@ -1,7 +1,8 @@
 import {getProducts as getProductsService,
     getProduct as getProductService,
     saveProduct as saveProductService,
-    updateProduct as updateProductService} from '../services/products.service.js'
+    updateProduct as updateProductService,
+getMockProducts as getMockProductsService} from '../services/products.service.js'
 const getProducts = async (req,res) =>{
     try {
 
@@ -111,9 +112,25 @@ const updateProduct = async (req,res)=>{
 
 }
 
+const mockingProducts = async (req,res)=>{
+    try{
+        const mockedProducts = await getMockProductsService();
+        res.status(200).send({
+            status: 'success',
+            payload: mockedProducts
+        });
+    }catch(error){
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+}
+
 export {
     getProducts,
     getProduct,
     saveProduct,
-    updateProduct
+    updateProduct,
+    mockingProducts
 }

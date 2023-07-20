@@ -17,7 +17,7 @@ const router = Router();
 
 
 router.post('/', addCart)
-router.get('/:cid/purchase',createPurchase)
+router.get('/:cid/purchase',passportCall('jwt'),authorization('user'),createPurchase)
 router.get('/:cid', getCart)
 router.put('/:cid', updateCart)
 router.put('/:cid/products/:pid', updateCartQuantity)

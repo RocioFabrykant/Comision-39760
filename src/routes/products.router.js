@@ -6,7 +6,8 @@ import {passportCall,authorization} from '../utils.js'
 import {    getProducts,
     getProduct,
     saveProduct,
-    updateProduct} from '../controllers/products.controller.js'
+    updateProduct,
+    mockingProducts} from '../controllers/products.controller.js'
 const router = Router();
 //const productManager = new ProductManager('./src/files/Productos.json');
 //const productManager = new Products();
@@ -19,6 +20,8 @@ router.get('/:pid', getProduct)
 router.post('/',passportCall('jwt'),authorization('admin'), saveProduct)
 
 router.put('/:pid',passportCall('jwt'),authorization('admin'), updateProduct)
+
+router.get('/mocking-products',mockingProducts)
 
 // router.delete('/:pid', async (req, res) => {
 //     const productId = Number(req.params.pid);

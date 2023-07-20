@@ -1,5 +1,6 @@
 //import {PRODUCTSDAO} from '../dao/index.js'
 import ProductsRepository from "../repositories/products.repository.js";
+import {generateProduct} from '../mock/mock-products.js'
 
 const productsRepository = new ProductsRepository();
 
@@ -23,9 +24,16 @@ const updateProduct = async(id,product)=>{
     return rdo;
 }
 
+const getMockProducts = async ()=>{
+    const products = await generateProduct();
+    console.log(products)
+    return products;
+}
+
 export{
     getProducts,
     getProduct,
     saveProduct,
-    updateProduct
+    updateProduct,
+    getMockProducts
 }

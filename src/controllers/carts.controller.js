@@ -143,9 +143,10 @@ const deleteCart = async (req,res) =>{
 }
 const createPurchase = async (req,res)=>{
     const carrito = req.params.cid;
+    const email = req.user.email;
     try{
-        const result = await createPurchaseService(carrito);
-        console.log(result)
+        const result = await createPurchaseService(carrito,email);
+        //console.log(result)
         res.status(200).send({
             status: 'success',
             payload: result

@@ -8,10 +8,12 @@ const ticketSchema = new mongoose.Schema({
     },
     purchase_datetime: {
         type: Date,
+        default:Date.now,
         required: true
     },
     code: {
         type: String,
+        unique:true,
         required: true
     },
     amount: {
@@ -19,8 +21,8 @@ const ticketSchema = new mongoose.Schema({
         required: true
     },
     purchaser: {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'users'
+        type:String,
+        required:true
 
         //correo del usuario asociado al carrito
     }
