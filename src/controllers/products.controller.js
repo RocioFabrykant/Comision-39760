@@ -1,3 +1,6 @@
+import CustomError from '../middlewares/errors/CustomError.js';
+import EErrors from '../middlewares/errors/enums.js';
+import { generateProductErrorInfo } from '../middlewares/errors/info.js';
 import {getProducts as getProductsService,
     getProduct as getProductService,
     saveProduct as saveProductService,
@@ -57,12 +60,25 @@ const saveProduct = async (req,res)=>{
 
 
     if (!producto.title || !producto.description || !producto.code || !producto.category || !producto.stock || !producto.price) {
-        return res.status(400).send({
-            status: 'error',
-            error: 'incomplete values'
-        });
+        // return res.status(400).send({
+        //     status: 'error',
+        //     error: 'incomplete values'
+        // });
+       const {title,description,code,category,stock,price} = producto;
+        throw CustomError.createError({
+            name:'ProductError',
+            cause:generateProductErrorInfo({
+               title,
+               description,
+               code,
+               category,
+               stock,
+               price
+            }),
+            message:'Error trying to create product',
+            code:EErrors.INVALID_TYPE_ERROR
+        })
     }
-    try {
         const rdo = await saveProductService(producto);
         if (rdo != "El producto ya existe") {
             const io = req.app.get('socketio');
@@ -74,12 +90,7 @@ const saveProduct = async (req,res)=>{
             add: producto,
             payload: rdo
         });
-    } catch (error) {
-        res.status(500).send({
-            status: 'error',
-            error
-        });
-    }
+    
 
 
 }
@@ -115,11 +126,13 @@ const updateProduct = async (req,res)=>{
 const mockingProducts = async (req,res)=>{
     try{
         const mockedProducts = await getMockProductsService();
+        console.log(mockedProducts)
         res.status(200).send({
             status: 'success',
             payload: mockedProducts
         });
     }catch(error){
+        console.log(error)
         res.status(500).send({
             status: 'error',
             error

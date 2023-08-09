@@ -67,4 +67,15 @@ export default class Products {
         const resultado = await productModel.findByIdAndUpdate(id, product);
         return resultado;
     }
-}
+
+    updateStock = async(id,quantity)=>{
+        const newStock = this.getById(id).stock - quantity;
+        const resultado = await productModel.updateOne({
+            _id: id
+        }, {
+            $set: {
+                "product.stock": newStock
+            }
+    })
+    return resultado
+}}
