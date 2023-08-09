@@ -1,3 +1,4 @@
+import { generateProduct } from '../mock/mock-products.js';
 import ProductsDao from '../dao/dbManagers/products.js';
 
 export default class ProductRepository{
@@ -22,8 +23,13 @@ export default class ProductRepository{
         const result = await this.dao.update(id,product);
         return result;
     }
-    updateStock = async ()=>{
-        
+    updateStock = async (id,quantity)=>{
+        const result = await this.dao.updateStock(id,quantity)
+        return result;
+    }
+    getMocked = async ()=>{
+        const productos = await generateProduct();
+        return productos;
     }
    
 }

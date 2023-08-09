@@ -15,13 +15,15 @@ const router = Router();
 
 router.get('/', getProducts)
 
+router.get('/mocking-products',mockingProducts)
+
 router.get('/:pid', getProduct)
 
-router.post('/',passportCall('jwt'),authorization('admin'), saveProduct)
+router.post('/', saveProduct)
 
 router.put('/:pid',passportCall('jwt'),authorization('admin'), updateProduct)
 
-router.get('/mocking-products',mockingProducts)
+
 
 // router.delete('/:pid', async (req, res) => {
 //     const productId = Number(req.params.pid);
