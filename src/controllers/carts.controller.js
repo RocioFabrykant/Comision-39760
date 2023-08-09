@@ -34,7 +34,6 @@ const getCart = async (req,res) =>{
             payload: cart
         })
     } catch (error) {
-        console.log('error');
         res.status(500).send({
             status: 'error',
             error
@@ -146,13 +145,11 @@ const createPurchase = async (req,res)=>{
     const email = req.user.email;
     try{
         const result = await createPurchaseService(carrito,email);
-        //console.log(result)
         res.status(200).send({
             status: 'success',
             payload: result
         })
     }catch(error){
-        console.log(error)
         res.status(500).send({
             status: 'error',
             error

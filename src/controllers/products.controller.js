@@ -60,10 +60,6 @@ const saveProduct = async (req,res)=>{
 
 
     if (!producto.title || !producto.description || !producto.code || !producto.category || !producto.stock || !producto.price) {
-        // return res.status(400).send({
-        //     status: 'error',
-        //     error: 'incomplete values'
-        // });
        const {title,description,code,category,stock,price} = producto;
         throw CustomError.createError({
             name:'ProductError',
@@ -126,13 +122,11 @@ const updateProduct = async (req,res)=>{
 const mockingProducts = async (req,res)=>{
     try{
         const mockedProducts = await getMockProductsService();
-        console.log(mockedProducts)
         res.status(200).send({
             status: 'success',
             payload: mockedProducts
         });
     }catch(error){
-        console.log(error)
         res.status(500).send({
             status: 'error',
             error
