@@ -56,15 +56,37 @@ const getProduct = async (req,res) =>{
 }
 
 const saveProduct = async (req,res)=>{
-    const producto = req.body;
+    //const producto = req.body;
+    const {title,description,code,category,stock,price} = req.body;
 
-
-    if (!producto.title || !producto.description || !producto.code || !producto.category || !producto.stock || !producto.price) {
-        return res.status(400).send({
-            status: 'error',
-            error: 'incomplete values'
-        });
+    if (!title || !description || !code || !category || !stock || !price) {
+        throw CustomError.createError({
+            //se llama al metodo static
+            name:"ProductError",
+            cause:generateProductErrorInfo({
+                title,
+                description,
+                code,
+                category,
+                stock,
+                price
+            }),
+            message:"Error trying to create product",
+            code:EErrors.INVALID_TYPE_ERROR
+        })
+        // return res.status(400).send({
+        //     status: 'error',
+        //     error: 'incomplete values'
+        // });
     }
+        const producto ={
+            title,
+            description,
+            code,
+            category,
+            stock,
+            price
+        }
         const rdo = await saveProductService(producto);
         if (rdo != "El producto ya existe") {
             const io = req.app.get('socketio');

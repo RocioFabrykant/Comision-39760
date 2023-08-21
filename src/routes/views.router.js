@@ -4,6 +4,11 @@ import {
 import Products from '../dao/dbManagers/products.js';
 import Carts from '../dao/dbManagers/carts.js'
 import passport from 'passport';
+import {saveUser,
+    getUser,
+    getUsers,
+    resetPassword,
+    newPassword} from '../controllers/users.controller.js'
 const router = Router();
 const productManager = new Products();
 const cartManager = new Carts()
@@ -118,6 +123,13 @@ router.get('/realtimeproducts', async (req, res) => {
 router.get('/chat', (req, res) => {
     res.render('chat');
 });
+
+router.get('/api/users/password-link', async(req,res)=>{
+    res.render('reset');
+})
+router.get('/api/users/reset-password/tkn/:token', async(req,res)=>{
+    res.render('newPassword');
+})
 
 
 

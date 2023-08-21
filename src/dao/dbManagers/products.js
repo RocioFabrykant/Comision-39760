@@ -68,14 +68,16 @@ export default class Products {
         return resultado;
     }
 
-    updateStock = async(id,quantity)=>{
-        const newStock = this.getById(id).stock - quantity;
-        const resultado = await productModel.updateOne({
+    updateStock = async(id,stock)=>{
+        //const producto = this.getById(id);
+        //const newStock = producto.stock - quantity;
+        await productModel.updateOne({
             _id: id
         }, {
             $set: {
-                "product.stock": newStock
-            }
+                stock: stock
+            },upsert:true
     })
-    return resultado
-}}
+}
+
+}

@@ -1,0 +1,191 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD  
+    post:
+      summary: Crea un producto nuevo
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/saveProduct'
+      responses:
+        "200":
+          description: El producto fue creado correctamente
+        "404":
+          description: Campos incompletos
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un solo producto a partir de su id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: El producto fue obtenido satisfactoriamente de la BDD
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+    /api/products/{pid}:
+    put:
+      summary: Actualiza el producto a partir de su id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El id del producto
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: El producto fue actualizado correctamente
+        "404":
+          description: El producto no fue encontrado en la BDD
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+  /api/products/mocking-products:
+    get:
+      summary: Obtiene 100 productos mockeados
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos satisfactoriamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongodb
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: String
+          description: Codigo del producto
+        category:
+          type: String
+          description: Categoria del producto
+        status:
+          type: String
+          description: Status del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Stock del producto
+      example:
+        _id: ObjectId("asdad324524")
+        title: mate
+        description: bebida caliente
+        code: aads12
+        stock: 13
+        status: true
+        price: 120
+        category: cafe/te/mate
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        code:
+          type: String
+          description: Codigo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        stock:
+          type: String
+          description: Stock del producto
+      example:
+        title: mate
+        description: bebida caliente
+        code: aads12
+        stock: 13
+        category: cafe/te/mate
+    saveProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        code:
+          type: String
+          description: Codigo del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        stock:
+          type: String
+          description: Stock del producto
+        price:
+          type: Number
+          description: Precio del producto
+        status:
+          type: Boolean
+          description: true/false. Status del producto. Valor por defecto true.
+      example:
+        title: mate
+        description: bebida caliente
+        code: aads12
+        stock: 13
+        category: cafe/te/mate
+        status: true
+        price: 20

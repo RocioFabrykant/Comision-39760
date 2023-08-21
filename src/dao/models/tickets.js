@@ -2,10 +2,7 @@ import mongoose from 'mongoose';
 const ticketCollection = 'tickets';
 
 const ticketSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
+
     purchase_datetime: {
         type: Date,
         default:Date.now,

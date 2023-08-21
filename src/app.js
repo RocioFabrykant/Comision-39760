@@ -6,6 +6,8 @@ import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 import {
     Server
 } from 'socket.io';
@@ -35,9 +37,22 @@ const app = express();
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación del proyecto Ecommerce',
+            description: 'API pensada para resolver el proceso de compra en una tienda online'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
 app.use(express.static(`${__dirname}/public`))
-
-
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -64,12 +79,13 @@ app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/realtimeproducts', viewsRouter);
+
 app.use('/chat', viewsRouter);
 app.use('/products', viewsRouter)
 app.use('/carts/:cid', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/users',usersRouter)
-
+app.use(errorHandler);
 app.get('/loggerTest',(req,res)=>{
 
     req.logger.fatal('Prueba fatal');
@@ -81,8 +97,6 @@ app.get('/loggerTest',(req,res)=>{
 
 })
 
-
-app.use(errorHandler);
 
 const server = app.listen(8081, () => console.log('listening on port 8081'));
 

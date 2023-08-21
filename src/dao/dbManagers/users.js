@@ -18,4 +18,13 @@ export default class Users {
         return result;
         
     }
+    resetPass = async (user,pass)=>{
+        await userModel.updateOne({
+            email: user.email
+        }, {
+            $set: {
+                password: pass
+            },upsert:true
+    })
+    }
 }

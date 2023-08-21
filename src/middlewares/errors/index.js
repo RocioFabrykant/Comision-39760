@@ -10,6 +10,13 @@ export default (error,req,res,next)=>{
                 description:error.cause
             })
             break;
+        case EErrors.PRODUCT_NOT_FOUND:
+            res.status(400).send({
+                status:'error',
+                error:error.name,
+                description:error.cause
+            })
+            break;
             default:
                 res.status(500).send({
                     status:'error',
@@ -17,7 +24,7 @@ export default (error,req,res,next)=>{
                     description:error.cause
                 })
                 break;
-            //deberiamos definir un case por cada error que tenemos definido
+
     }
-    next();//para que ejecucion siga correctamente, y se lancen los codigos http
+    next();
 }

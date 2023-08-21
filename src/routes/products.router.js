@@ -8,7 +8,9 @@ import {    getProducts,
     saveProduct,
     updateProduct,
     mockingProducts} from '../controllers/products.controller.js'
-const router = Router();
+import toAsyncRouter from 'async-express-decorator';
+
+const router = toAsyncRouter(Router());
 //const productManager = new ProductManager('./src/files/Productos.json');
 //const productManager = new Products();
 

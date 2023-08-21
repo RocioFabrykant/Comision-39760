@@ -36,7 +36,7 @@ const deleteCartProducts = async (idCarrito)=>{
     return rdo;
 }
 
-const createPurchase = async (idCarrito,email)=>{
+const createPurchase = async (idCarrito,purchaser)=>{
     const cart = await cartsRepository.getCartById(idCarrito);
     const productstoBuy = [];
     const nonStockProducts = [];
@@ -55,31 +55,41 @@ const createPurchase = async (idCarrito,email)=>{
 //     //     _id: idCarrito
 //     // }).lean()
 //     //let arr = []
-console.log(cart.products)
+
     for(const p of cart.products){
-        const product = await productsRepository.getProductById(p._id);
+        const product = await productsRepository.getProductById(p.product);
+        //productstoBuy.push(product);
+    
+    //return productstoBuy;
         if(product.stock>= p.quantity){
             productstoBuy.push({
-                title:p.title,
-                price:p.price,
+                title:product.title,
+                price:product.price,
                 quantity:p.quantity
             })
-            await productsRepository.updateStock(product._id,p.quantity)
-            await cartsRepository.deleteProductCart(idCarrito,product._id)
-            amount+=p.quantity*p.price; 
+        
+    
+    //    return productstoBuy;
+            amount+=p.quantity*product.price;
+            await productsRepository.updateStock(p.product,product.stock-p.quantity)
+            await cartsRepository.deleteProductCart(idCarrito,p.product)
+            
         }else{
-            nonStockProducts.push(p._id);
+            nonStockProducts.push(p.product);
         }
     }
+    //return nonStockProducts;
+    // //TICKET
+    let code = uuidv4();
+    const purchase_datetime = new Date();
+    // const newTicket = {
 
-    //TICKET
-    let code = uuidv4().toString;
-    const dateNow = new Date().toLocaleDateString();
-    const generateTicket = await ticketRepository.saveTicket(code,dateNow,amount,email);
+    // }
+    const generateTicket = await ticketRepository.saveTicket({purchase_datetime,code,amount,purchaser});
     const ticket = {generateTicket,productstoBuy,nonStockProducts};
 
     const emailtoSend =  {from: "E-commerce Fabrykant",
-    to: email, 
+    to: purchaser, 
     subject: "Ticket", 
     html:await ticketRepository.listofProducts(productstoBuy,amount)};
     await sendEmail(emailtoSend);

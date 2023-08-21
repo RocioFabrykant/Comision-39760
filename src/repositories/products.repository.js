@@ -23,9 +23,9 @@ export default class ProductRepository{
         const result = await this.dao.update(id,product);
         return result;
     }
-    updateStock = async (id,quantity)=>{
-        const result = await this.dao.updateStock(id,quantity)
-        return result;
+    updateStock = async (id,stock)=>{
+        await this.dao.updateStock(id,stock)
+        //return result;
     }
     getMocked = async ()=>{
         const productos = await generateProduct();

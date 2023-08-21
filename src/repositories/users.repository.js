@@ -17,8 +17,17 @@ export default class UserRepository{
     getUserByEmail = async (email)=>{
         
         const user = await this.dao.getByEmail(email);
-        const result = new UsersDto(user);
-        return result;
+        //const result = new UsersDto(user);
+        //return result;
+        return user;
+    }
+    linkPassword = async (token)=>{
+        let html = `<a href="http://localhost:8081/api/users/reset-password/tkn/${token}">Link para reseteo</a>`;
+        return html;
+    }
+    resetPassword = async (user,pass)=>{
+        await this.dao.resetPass(user,pass);
+
     }
    
 }

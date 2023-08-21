@@ -5,10 +5,30 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 export const createHash = password => bcrypt.hashSync(password,bcrypt.genSaltSync(10));
 export const isValidPassword = (user,password) => bcrypt.compareSync(password,user.password);
+
 const PRIVATE_KEY = 'coder39760'
 export const generateToken = (user)=>{
     const token = jwt.sign({user},PRIVATE_KEY,{expiresIn:'24h'})
     return token;
+}
+
+export const generateTokenReset = (email)=>{
+    const tokenReset = jwt.sign({email},PRIVATE_KEY,{expiresIn:'1h'})
+    return tokenReset;
+}
+
+export const authTokenReset = (token)=>{
+    
+    return async (req,res,next)=>{
+    jwt.verify(token,PRIVATE_KEY,(error,credentials)=>{
+        //verifico con private key creada y callback error por si se genera
+        //credentials es lo que tengamos embebido
+        if(error) return res.status(403).send({error:'not authorized'})
+        req.email = credentials.email;
+        
+        next();
+    })
+}
 }
 //es un middleware, req, res, next
 export const authToken = (req,res,next)=>{
