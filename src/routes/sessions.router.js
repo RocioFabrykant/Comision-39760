@@ -26,12 +26,12 @@ router.post('/login', passport.authenticate('login', {
     failureRedirect: 'fail-login'
 }), async (req, res) => {
 
-    if (!req.user){
+    if (!req.user) {
         return res.status(401).send({
-        status: 'error',
-        error: 'User not found'
+            status: 'error',
+            error: 'User not found'
         });
-    } 
+    }
 
     req.session.user = {
         first_name: req.user.first_name,

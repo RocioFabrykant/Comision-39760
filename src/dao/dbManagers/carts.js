@@ -2,13 +2,10 @@ import ProductManager from './products.js'
 import {
     cartModel
 } from '../models/carts.js'
-// import {
-//     updateProduct as updateProductService} from '../services/products.service.js'
-//import {PRODUCTSDAO} from '../dao/index.js'
 
 const productManager = new ProductManager();
 export default class Carts {
-    
+
     constructor() {
         console.log('Working carts with DB');
 
@@ -18,16 +15,11 @@ export default class Carts {
         return carts;
     }
     getById = async (id) => {
-        //
-        
+
         const cart = await cartModel.findOne({
             _id: id
         }).populate('products.product').lean();
-        //console.log(cart.products.product.title);
-        // populate({path: "products.product", select: "title"}).lean();
 
-        console.log(JSON.stringify(cart,null, '\t'))
-        //console.log(cart)
         return cart;
 
     }
@@ -102,7 +94,6 @@ export default class Carts {
             _id: id
         }).lean()
         const rdo = cart.products.findIndex(e => e.product == product._id)
-        console.log(rdo);
         if (rdo != -1) {
             const cantidad = (cart.products[rdo].quantity) + 1;
             const resultado = await cartModel.updateOne({
@@ -123,49 +114,33 @@ export default class Carts {
             })
             return resultado;
         }
-        cart.products.push({product})
-        // const result = await cartModel.updateOne({
-        //     _id: id
-        // }, {
-        //     $push: {
-        //         products: product
-        //     }
-        // });
-        const result = await cartModel.updateOne({_id:id},cart)
+        cart.products.push({
+            product
+        })
+
+        const result = await cartModel.updateOne({
+            _id: id
+        }, cart)
         return result;
     }
-    createPurchase = async (idCarrito)=>{
+    createPurchase = async (idCarrito) => {
         const cart = await cartModel.findOne({
-            _id: idCarrito
-        })
-        //.populate({path:'products.product', select:'stock'}).lean();
-        .populate('products.product').lean();
-       // return cart;
-        //let newarray = [];
-        // const cart = await cartModel.findOne({
-        //     _id: idCarrito
-        // }).lean()
-        //let arr = []
-        for(let i=0;i<cart.products.length;i++){
-            if(cart.products[i].quantity<= cart.products[i].product.stock){
-                cart.products[i].product.stock=  cart.products[i].product.stock - cart.products[i].quantity
-                //const product = cart.products[i].product.titlecart.products[i].product.description
-                const rdo = await productManager.update(cart.products[i].product._id.toString(),cart.products[i].product)
-                //console.log(cart.products[i]._id.toString(),cart.products[i].product)
-                
+                _id: idCarrito
+            })
+            .populate('products.product').lean();
+
+        for (let i = 0; i < cart.products.length; i++) {
+            if (cart.products[i].quantity <= cart.products[i].product.stock) {
+                cart.products[i].product.stock = cart.products[i].product.stock - cart.products[i].quantity
+
+                const rdo = await productManager.update(cart.products[i].product._id.toString(), cart.products[i].product)
+
+
                 return rdo;
-            }else{
+            } else {
 
             }
         }
-        // cart.products.forEach(function(a){
-        // if(quantity <= a.stock) {
-        // a.stock = a.stock - quantity;
-        // console.log(a.stock)
-        // newarray.push(a)
-        // }
-        // })
-        // return newarray;
-        //const newaarray = cart.products.map(e=>e.quantity<=e.stock)
+
     }
 }

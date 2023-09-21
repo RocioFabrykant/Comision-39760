@@ -1,0 +1,28 @@
+<div>
+
+    <h1>Admin Users</h1>
+
+    {{#each users}}
+    <div class="user">
+        <p>Nombre:{{this.first_name}}</p>
+        <p>Apellido:{{this.last_name}}</p>
+        <p>Mail: {{this.email}}</p>
+        <p>Rol: {{this.role}}</p>
+        <select id="rolSelect">
+              <option  value="admin">ADMIN</option>
+              <option  value="premium">PREMIUM</option>
+              <option  value="user">USER</option>
+        </select>
+        <p hidden id="user_id">{{this._id}}</p>
+        <button id="cambiarRol" onclick="changeRol(this)">Aplicar</button>
+   
+        <br><br>
+        <span>Eliminar Usuario</span>
+        <button onclick="deleteUser(this)">Eliminar usuario</button>
+               
+    </div>
+    <br><br>
+    {{/each}}
+</div>
+
+<script src="/js/adminusers.js"></script>

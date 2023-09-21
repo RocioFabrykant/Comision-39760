@@ -1,4 +1,3 @@
-//MSJE PERSONALIZADO DE ERROR
 
 export const generateProductErrorInfo = (product)=>{
     return `One or more properties were incomplete or not valid.
@@ -10,5 +9,4 @@ export const generateProductErrorInfo = (product)=>{
     *price : needs to be a number, received ${product.price}
     *code : needs to be a string, received ${product.code}`
 
-    //PARA QUE SEA MAS DESCRIPTIVO PARA EL FRONTEND
 }

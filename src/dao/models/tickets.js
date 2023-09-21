@@ -21,7 +21,6 @@ const ticketSchema = new mongoose.Schema({
         type:String,
         required:true
 
-        //correo del usuario asociado al carrito
     }
 })
 export const ticketModel = mongoose.model(ticketCollection, ticketSchema);

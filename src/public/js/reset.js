@@ -28,7 +28,7 @@ form.addEventListener('submit', async e => {
         if (result.status === 200) {
             window.alert('Correo enviado')
 
-        }else {
+        } else {
             window.alert('Error')
         }
 

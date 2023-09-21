@@ -9,23 +9,20 @@
     <p>Email: {{user.email}}</p>
 
 
-
-    {{!-- <a href="/api/sessions/logout"><button>Salir</button></a> --}}
-
     </div>
 
     <h1>Bienvenidos a los productos</h1>
     {{#each products}}
-    <div>
+    <div class="product">
         <p>Titulo: {{this.title}}</p>
         <p>Descripcion: {{this.description}}</p>
         <p>Codigo: {{this.code}}</p>
         <p>Stock: {{this.stock}}</p>
         <p>Categoria: {{this.category}}</p>
         <p>Status: {{this.status}}</p>
-        <p>ID: {{this._id}}<p/>
+        <p hidden id="product_id">{{this._id}}<p/>
         <a href="/addtocart/647367f3d5ff75ba5dab6f0c/product/{{this._id}}"><button>Agregar al carrito</button></a>
-        
+        {{!-- <button onclick="addToCart(this)">Agregar al carrito(con id cart localstorage)</button> --}}
     </div>
     <br><br>
     {{/each}}
@@ -39,3 +36,4 @@
     {{/if}}
 </div>
 
+<script src="/js/products.js"></script>

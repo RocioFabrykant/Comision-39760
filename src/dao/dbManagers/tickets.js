@@ -1,16 +1,18 @@
-import {ticketModel} from '../models/tickets.js'
+import {
+    ticketModel
+} from '../models/tickets.js'
 
 export default class Tickets {
-    constructor (){
+    constructor() {
         console.log('Working tickets with db')
     }
 
-    save = async (ticket) =>{
+    save = async (ticket) => {
         const result = await ticketModel.create(ticket);
         return result;
-        
+
     }
-    findById = async (id) =>{
+    findById = async (id) => {
         const result = await ticketModel.findById(id);
         return result;
     }

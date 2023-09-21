@@ -1,35 +1,42 @@
 import CustomError from '../middlewares/errors/CustomError.js';
 import EErrors from '../middlewares/errors/enums.js';
-import { generateProductErrorInfo } from '../middlewares/errors/info.js';
-import {getProducts as getProductsService,
+import {
+    generateProductErrorInfo
+} from '../middlewares/errors/info.js';
+import {
+    getProducts as getProductsService,
     getProduct as getProductService,
     saveProduct as saveProductService,
     updateProduct as updateProductService,
-getMockProducts as getMockProductsService} from '../services/products.service.js'
-const getProducts = async (req,res) =>{
+    getMockProducts as getMockProductsService,
+    deleteProduct as deleteProductService
+} from '../services/products.service.js'
+const getProducts = async (req, res) => {
     try {
 
-        const {page=1,limit=10, sort="", query=""} = req.query;
-  
-        const productResult = await getProductsService(limit,page,sort,query);
-            if(productResult.hasPrevPage){
-                    productResult.prevLink = productResult.prevPage;
-            }else{
-                productResult.prevLink = null;
-            }
+        const {
+            page = 1, limit = 10, sort = "", query = ""
+        } = req.query;
 
-            if(productResult.hasNextPage){
-                productResult.nextLink = productResult.nextPage;
+        const productResult = await getProductsService(limit, page, sort, query);
+        if (productResult.hasPrevPage) {
+            productResult.prevLink = productResult.prevPage;
+        } else {
+            productResult.prevLink = null;
+        }
 
-            }else{
-                productResult.nextLink = null;
-            }
+        if (productResult.hasNextPage) {
+            productResult.nextLink = productResult.nextPage;
+
+        } else {
+            productResult.nextLink = null;
+        }
         res.status(200).send({
             status: 'success',
             payload: productResult
         });
 
-        
+
     } catch (error) {
         res.status(500).send({
             status: 'error',
@@ -38,7 +45,7 @@ const getProducts = async (req,res) =>{
     }
 }
 
-const getProduct = async (req,res) =>{
+const getProduct = async (req, res) => {
     const productId = req.params.pid;
     try {
 
@@ -55,15 +62,22 @@ const getProduct = async (req,res) =>{
     }
 }
 
-const saveProduct = async (req,res)=>{
-    //const producto = req.body;
-    const {title,description,code,category,stock,price} = req.body;
+const saveProduct = async (req, res) => {
+    const owner = req.user.email;
+
+    const {
+        title,
+        description,
+        code,
+        category,
+        stock,
+        price
+    } = req.body;
 
     if (!title || !description || !code || !category || !stock || !price) {
         throw CustomError.createError({
-            //se llama al metodo static
-            name:"ProductError",
-            cause:generateProductErrorInfo({
+            name: "ProductError",
+            cause: generateProductErrorInfo({
                 title,
                 description,
                 code,
@@ -71,39 +85,36 @@ const saveProduct = async (req,res)=>{
                 stock,
                 price
             }),
-            message:"Error trying to create product",
-            code:EErrors.INVALID_TYPE_ERROR
+            message: "Error trying to create product",
+            code: EErrors.INVALID_TYPE_ERROR
         })
-        // return res.status(400).send({
-        //     status: 'error',
-        //     error: 'incomplete values'
-        // });
     }
-        const producto ={
-            title,
-            description,
-            code,
-            category,
-            stock,
-            price
-        }
-        const rdo = await saveProductService(producto);
-        if (rdo != "El producto ya existe") {
-            const io = req.app.get('socketio');
-            io.emit('showProducts', await getProductsService());
-        }
+    const producto = {
+        title,
+        description,
+        code,
+        category,
+        stock,
+        price,
+        owner
+    }
+    const rdo = await saveProductService(producto);
+    if (rdo != "El producto ya existe") {
+        const io = req.app.get('socketio');
+        io.emit('showProducts', await getProductsService());
+    }
 
-        res.status(200).send({
-            status: 'success',
-            add: producto,
-            payload: rdo
-        });
-    
+    res.status(200).send({
+        status: 'success',
+        add: producto,
+        payload: rdo
+    });
+
 
 
 }
 
-const updateProduct = async (req,res)=>{
+const updateProduct = async (req, res) => {
     const producto = req.body;
     const id = req.params.pid;
 
@@ -130,17 +141,37 @@ const updateProduct = async (req,res)=>{
 
 
 }
+const deleteProduct = async (req, res) => {
+    const id = req.params.pid;
+    const elProducto = await getProductService(id);
+    if (!elProducto) {
+        return res.status(400).send({
+            status: 'error',
+            error: 'Product does not exist'
+        });
+    }
 
-const mockingProducts = async (req,res)=>{
-    try{
+    try {
+        await deleteProductService(id)
+        res.status(200).send({
+            status: 'success',
+            message: 'Product eliminated'
+        });
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            error
+        });
+    }
+}
+const mockingProducts = async (req, res) => {
+    try {
         const mockedProducts = await getMockProductsService();
-        console.log(mockedProducts)
         res.status(200).send({
             status: 'success',
             payload: mockedProducts
         });
-    }catch(error){
-        console.log(error)
+    } catch (error) {
         res.status(500).send({
             status: 'error',
             error
@@ -153,5 +184,6 @@ export {
     getProduct,
     saveProduct,
     updateProduct,
-    mockingProducts
+    mockingProducts,
+    deleteProduct
 }

@@ -1,4 +1,3 @@
-//DE ACUERDO AL CODIGO DE ERROR (DICCIONARIO). CODIGO HTTP
 import EErrors from "./enums.js"
 
 export default (error,req,res,next)=>{

@@ -16,24 +16,21 @@ import authRouter from './routes/auth.router.js'
 
 import cookieParser from 'cookie-parser';
 import initializePassport from './config/passport.config.js'
-import mongoose from 'mongoose';
 import Messages from './dao/dbManagers/messages.js';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import sessionsRouter from './routes/sessions.router.js'
 import usersRouter from './routes/users.router.js'
 import passport from 'passport';
-import { addLogger } from './utils/loggers.js';
+import {
+    addLogger
+} from './utils/loggers.js';
 import errorHandler from './middlewares/errors/index.js'
+import config from './config/config.js'
 
 const messageManager = new Messages();
 
 const app = express();
-// try {
-//     await mongoose.connect('mongodb+srv://fabrykantr:m19w444GvyS34fvF@cluster39760rf.l5l8vvj.mongodb.net/ecommerce?retryWrites=true&w=majority')
-// } catch (error) {
-//     console.log(error);
-// }
+const port = config.port;
+
 app.engine('handlebars', handlebars.engine());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
@@ -58,21 +55,12 @@ app.use(express.urlencoded({
     extended: true
 }))
 
-// app.use(session({
-//     store: MongoStore.create({
-//         client: mongoose.connection.getClient(),
-//         ttl: 3600
-//     }),
-//     secret: config.secretOrKey,
-//     resave: true,
-//     saveUninitialized: true
-// }))
+
 app.use(addLogger);
 app.use(cookieParser());
 initializePassport();
 app.use(passport.initialize());
 
-// //app.use(passport.session());
 app.use('/api/auth', authRouter);
 
 app.use('/', viewsRouter);
@@ -84,9 +72,9 @@ app.use('/chat', viewsRouter);
 app.use('/products', viewsRouter)
 app.use('/carts/:cid', viewsRouter);
 app.use('/api/sessions', sessionsRouter);
-app.use('/api/users',usersRouter)
+app.use('/api/users', usersRouter)
 app.use(errorHandler);
-app.get('/loggerTest',(req,res)=>{
+app.get('/loggerTest', (req, res) => {
 
     req.logger.fatal('Prueba fatal');
     req.logger.error('prueba error');
@@ -98,7 +86,7 @@ app.get('/loggerTest',(req,res)=>{
 })
 
 
-const server = app.listen(8081, () => console.log('listening on port 8081'));
+const server = app.listen(port, () => console.log('listening on port' + ' ' + port));
 
 const io = new Server(server);
 

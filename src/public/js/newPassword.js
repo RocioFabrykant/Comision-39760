@@ -11,7 +11,7 @@ form.addEventListener('submit', async e => {
     const obj = {};
 
     data.forEach((value, key) => obj[key] = value);
-    fetch('/api/users/reset-password/tkn/:token', {
+    fetch('/api/users/reset-password', {
 
         method: 'POST',
 
@@ -19,21 +19,20 @@ form.addEventListener('submit', async e => {
 
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
-
+            'Content-Type': 'application/json',
         }
 
     }).then(result => {
 
         if (result.status === 200) {
 
-            //window.location.replace('/products');
             window.alert('Contraseña modificada')
 
-        }else if(result.status === 403){
+
+        } else if (result.status === 403) {
             window.alert('El link ha expirado')
             window.location.replace('/api/users/link-password');
-        }else if(result.status === 401){
+        } else if (result.status === 401) {
             window.alert('Debe seleccionar una nueva contraseña')
         }
 

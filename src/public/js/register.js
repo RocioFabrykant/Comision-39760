@@ -27,7 +27,6 @@ form.addEventListener('submit',async e => {
 
         if (result.status === 200) {
             window.alert('Registro exitoso')
-           // window.location.replace('/');
 
         }else if(result.status === 400){
             window.alert('Registro invalido. Complete los campos requeridos')

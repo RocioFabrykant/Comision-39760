@@ -1,7 +1,6 @@
 const form = document.getElementById('loginForm');
 
 
-
 form.addEventListener('submit', async e => {
 
     e.preventDefault();
@@ -30,10 +29,10 @@ form.addEventListener('submit', async e => {
             window.location.replace('/products');
             window.alert('Login exitoso')
 
-        }else if(result.status === 401){
+        } else if (result.status === 401) {
             window.alert('Login invalido')
         }
-///api/auth/current
+
     })
 
 })

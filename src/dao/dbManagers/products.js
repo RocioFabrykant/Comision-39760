@@ -48,7 +48,6 @@ export default class Products {
     }
 
     save = async (product) => {
-
         const rdo = await productModel.find({
             $or: [{
                 code: product.code
@@ -56,7 +55,7 @@ export default class Products {
                 title: product.title
             }]
         });
-        if (!rdo) {
+        if (rdo.length != 0) {
             return 'El producto ya existe'
         }
         const result = await productModel.create(product);
@@ -68,16 +67,21 @@ export default class Products {
         return resultado;
     }
 
-    updateStock = async(id,stock)=>{
-        //const producto = this.getById(id);
-        //const newStock = producto.stock - quantity;
+    updateStock = async (id, stock) => {
+
         await productModel.updateOne({
             _id: id
         }, {
             $set: {
                 stock: stock
-            },upsert:true
-    })
-}
+            },
+            upsert: true
+        })
+    }
+    deleteProduct = async (id) => {
+        await productModel.deleteOne({
+            _id: id
+        })
+    }
 
 }

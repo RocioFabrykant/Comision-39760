@@ -12,7 +12,7 @@ export default class ProductManager {
                 producto.id = 1;
             } else {
                 producto.id = productos[productos.length - 1].id + 1;
-                if (productos.find(p => p.code === producto.code)||productos.find(p => p.title === producto.title)) {
+                if (productos.find(p => p.code === producto.code) || productos.find(p => p.title === producto.title)) {
                     return 'El producto ya existe';
                 }
 

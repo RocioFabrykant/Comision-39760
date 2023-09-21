@@ -1,20 +1,22 @@
-import {saveCart as saveCartService,
+import {
+    saveCart as saveCartService,
     getCart as getCartService,
     updateCart as updateCartService,
     updateCartQuantity as updateCartQuantityService,
     updateCartProduct as updateCartProductService,
     deleteCartProduct as deleteCartProductService,
     deleteCartProducts as deleteCartProductsService,
-createPurchase as createPurchaseService} from '../services/carts.service.js'
-const addCart = async (req,res)=>{
+    createPurchase as createPurchaseService
+} from '../services/carts.service.js'
+const addCart = async (req, res) => {
     const cart = {
         products: []
     }
     try {
         const result = await saveCartService(cart);
-        res.status(200).send({
+        res.json({
             status: 'success',
-            payload: result
+            payload: result._id
         })
     } catch (error) {
         res.status(500).send({
@@ -24,7 +26,7 @@ const addCart = async (req,res)=>{
     }
 }
 
-const getCart = async (req,res) =>{
+const getCart = async (req, res) => {
     const cartId = req.params.cid;
     try {
         const cart = await getCartService(cartId)
@@ -42,17 +44,17 @@ const getCart = async (req,res) =>{
     }
 }
 
-const updateCart = async (req,res) =>{
+const updateCart = async (req, res) => {
     const idCarrito = req.params.cid;
     const productos = req.body;
-    try{
-        const resultado = updateCartProductService(idCarrito,productos);
+    try {
+        const resultado = updateCartProductService(idCarrito, productos);
         return res.status(200).send({
             status: 'success',
             resultado
         });
 
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
             status: 'error',
             error
@@ -60,28 +62,30 @@ const updateCart = async (req,res) =>{
     }
 }
 
-const updateCartQuantity = async (req,res) =>{
+const updateCartQuantity = async (req, res) => {
     const idCarrito = req.params.cid;
     const idProducto = req.params.pid;
 
-    const {quantity} = req.body;
-    
-    try{
-        
-        const cantidadUpdate = await updateCartQuantityService(idCarrito,idProducto,quantity)
-    
+    const {
+        quantity
+    } = req.body;
+
+    try {
+
+        const cantidadUpdate = await updateCartQuantityService(idCarrito, idProducto, quantity)
+
         return res.status(200).send({
             status: 'success',
             cantidadUpdate
         });
-    }catch(error){
+    } catch (error) {
         res.status(500).send({
             status: 'error',
             error
         });
     }
 }
-const updateCartProduct = async (req,res) =>{
+const updateCartProduct = async (req, res) => {
     const idProducto = req.params.pid;
     const idCarrito = req.params.cid;
     try {
@@ -95,9 +99,7 @@ const updateCartProduct = async (req,res) =>{
             status: 'success',
             prodAgregado
         });
-    }
-
-    catch (error) {
+    } catch (error) {
 
         res.status(500).send({
             status: 'error',
@@ -106,12 +108,12 @@ const updateCartProduct = async (req,res) =>{
     }
 }
 
-const deleteCartProduct = async (req,res) =>{
+const deleteCartProduct = async (req, res) => {
     const idProducto = req.params.pid;
     const idCarrito = req.params.cid;
     try {
         await cartManager.getById(idCarrito);
-        const result = await deleteCartProductService(idCarrito,idProducto);
+        const result = await deleteCartProductService(idCarrito, idProducto);
         res.status(200).send({
             status: 'success',
             payload: result
@@ -124,7 +126,7 @@ const deleteCartProduct = async (req,res) =>{
     }
 }
 
-const deleteCart = async (req,res) =>{
+const deleteCart = async (req, res) => {
     const idCarrito = req.params.cid;
     try {
         await cartManager.getById(idCarrito);
@@ -140,22 +142,21 @@ const deleteCart = async (req,res) =>{
         });
     }
 }
-const createPurchase = async (req,res)=>{
+const createPurchase = async (req, res) => {
     const carrito = req.params.cid;
     const purchaser = req.user.email;
-    try{
-        const result = await createPurchaseService(carrito,purchaser);
+    try {
+        const result = await createPurchaseService(carrito, purchaser);
         res.status(200).send({
             status: 'success',
             payload: result
         })
-    }catch(error){
-        console.log(error)
+    } catch (error) {
         res.status(500).send({
             status: 'error',
             error
         });
-        
+
     }
 }
 export {
